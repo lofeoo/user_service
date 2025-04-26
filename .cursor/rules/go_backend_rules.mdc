@@ -1,0 +1,59 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Go 后端项目结构指南
+
+本项目遵循标准的 Go 后端项目结构，主要目录和文件如下：
+
+- `app/`: 项目内部实现代码。
+    - `conf/`: 配置结构体定义。
+    - `consts/`: 项目常量定义。
+    - `core/`: 核心功能模块。
+    - `http/`: HTTP 请求处理（控制器层）。
+    - `dao/`: 数据库仓库层。
+    - `server/`: 服务器相关功能。
+    - `service/`: 业务服务层。
+    - `middleware/`: 中间件定义。
+    - `util/`: 项目使用的第三方库。
+- `bin/`: 编译后的可执行文件，例如：[bin/demoapi](mdc:bin/demoapi)。
+- `script/`: 定时任务脚本。
+- `main/`: 应用程序入口文件。
+    - `demoapi/`: 具体服务的入口。
+        - [main/demoapi/main.go](mdc:main/demoapi/main.go): 启动文件。
+        - [main/demoapi/wire.go](mdc:main/demoapi/wire.go): Wire 依赖注入配置文件。
+        - [main/demoapi/wire_gen.go](mdc:main/demoapi/wire_gen.go): Wire 生成的依赖注入代码。
+- `configs/`: 配置文件目录。
+    - `gray/`: 灰度环境配置。
+    - `local/`: 本地开发环境配置。
+    - `online/`: 线上环境配置。
+    - `test/`: 测试环境配置。
+    - [configs/rpc.yaml](mdc:configs/rpc.yaml): RPC 服务配置。
+    - [configs/user_privacy.json](mdc:configs/user_privacy.json): 用户隐私配置。
+- `docs/`: 项目文档。
+    - [docs/README.md](mdc:docs/README.md): 项目说明文档。
+    - [docs/update_20250214_activity.sql](mdc:docs/update_20250214_activity.sql): 数据库脚本示例。
+- `log/`: 日志目录。
+- `libs/`: 公共库目录。
+- `mock/`: Mock 相关库。
+- `third_party/`: 第三方库。
+- `proto/`: Proto 文件。
+    - `demoapi/`: 所有路由定义。
+        - `api/`: API 路由定义。
+        - `base/`: 基础类型定义。
+        - `demo/`: 示例类型定义。
+        - `user/`: 用户类型定义。
+    - `gen/go/proto/demoapi/`: 生成的 Go 代码。
+        - `api/`: 生成的 API 代码（例如：[proto/gen/go/proto/demoapi/api/xxx_pb.go](mdc:proto/gen/go/proto/demoapi/api/xxx_pb.go)）。
+        - `base/`: 生成的基础类型代码。
+        - `demo/`: 生成的示例类型代码。
+        - `user/`: 生成的用户类型代码。
+    - `openapi/`: Swagger 文件。
+
+本项目遵循 RESTful 接口风格，例如：
+- 读取操作：`GET /users`
+- 写入操作：`POST /users`
+
+代码风格和结构遵循 Go 惯用法和最佳实践，注重可读性、安全性和性能。
+

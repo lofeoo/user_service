@@ -1,0 +1,57 @@
+server:
+  name: "user-service"
+  host: "0.0.0.0"
+  port: 8080
+  mode: "debug"  # 开发环境设为 debug，生产环境设为 release
+  timeout: "30s"
+  max_conns: 1000
+
+mysql:
+  host: "localhost"
+  port: 3306
+  user: "root"
+  password: "password"
+  database: "user_service"
+  max_idle_conn: 10
+  max_open_conn: 100
+
+redis:
+  host: "localhost"
+  port: 6379
+  password: ""
+  db: 0
+  max_idle: 10
+  max_active: 100
+  idle_timeout: 300
+
+nacos:
+  host: "localhost"
+  port: 8848
+  namespace: "public"
+  user: "nacos"
+  password: "nacos"
+  data_id: "user-service"
+  group: "DEFAULT_GROUP"
+
+zipkin:
+  endpoint: "http://localhost:9411/api/v2/spans"
+  service_name: "user-service"
+  sample_rate: 1.0
+
+auth:
+  jwt_secret: "your-jwt-secret-key"
+  jwt_expiration: "24h"
+  refresh_expiration: "720h"
+  oauth2_redirect_url: "http://localhost:8080/callback"
+  github_client_id: "your-github-client-id"
+  github_client_secret: "your-github-client-secret"
+  google_client_id: "your-google-client-id"
+  google_client_secret: "your-google-client-secret"
+
+log:
+  level: "info"
+  filename: "logs/app.log"
+  max_size: 500
+  max_backups: 10
+  max_age: 30
+  compress: true 
