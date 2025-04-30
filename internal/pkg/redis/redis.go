@@ -19,12 +19,12 @@ var (
 // 初始化Redis
 func InitRedis(config *conf.RedisConfig) (*redis.Client, error) {
 	client := redis.NewClient(&redis.Options{
-		Addr:         fmt.Sprintf("%s:%d", config.Host, config.Port),
-		Password:     config.Password,
-		DB:           config.DB,
-		MaxIdleConns: config.MaxIdle,
-		PoolSize:     config.MaxActive,
-		IdleTimeout:  time.Duration(config.IdleTimeout) * time.Second,
+		Addr:            fmt.Sprintf("%s:%d", config.Host, config.Port),
+		Password:        config.Password,
+		DB:              config.DB,
+		MaxIdleConns:    config.MaxIdle,
+		PoolSize:        config.MaxActive,
+		ConnMaxIdleTime: time.Duration(config.IdleTimeout) * time.Second,
 	})
 
 	// 测试连接

@@ -1,18 +1,19 @@
 package router
 
 import (
-	"github.com/cloudwego/hertz/pkg/app/middlewares"
-	"github.com/cloudwego/hertz/pkg/app/server"
-
 	"user_service/internal/api/handler"
 	authService "user_service/internal/auth/service"
 	"user_service/internal/pkg/middleware"
+
+	"github.com/cloudwego/hertz/pkg/app/middlewares/server/recovery"
+	"github.com/cloudwego/hertz/pkg/app/server"
 )
 
 // Register 注册路由
 func Register(h *server.Hertz, userHandler *handler.UserHandler, authHandler *handler.AuthHandler, authSvc *authService.AuthService) {
 	// 注册全局中间件
-	h.Use(middlewares.Recovery()) // 错误恢复中间件
+	// h.Use(middlewares.Recovery()) // 使用新的 recover 中间件
+	h.Use(recovery.Recovery()) // 错误恢复中间件
 
 	// API组
 	api := h.Group("/api/v1")

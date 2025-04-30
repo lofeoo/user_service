@@ -8,12 +8,10 @@ import (
 	"syscall"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
+	"github.com/cloudwego/hertz/pkg/app/server/registry"
 	"github.com/cloudwego/hertz/pkg/common/hlog"
-	"github.com/cloudwego/hertz/pkg/common/utils"
-	"github.com/cloudwego/kitex/pkg/registry"
-	"github.com/cloudwego/kitex/pkg/rpcinfo"
-	nacos "github.com/kitex-contrib/registry-nacos/registry"
-	nacosResolver "github.com/kitex-contrib/registry-nacos/resolver"
+	"github.com/cloudwego/kitex/pkg/utils"
+	"github.com/hertz-contrib/registry/nacos"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
@@ -31,7 +29,7 @@ import (
 
 func main() {
 	// 1. 初始化配置
-	config, err := conf.Init("")
+	config, err := conf.Init("config\\config.yaml")
 	if err != nil {
 		panic(fmt.Sprintf("初始化配置失败: %v", err))
 	}
@@ -85,13 +83,13 @@ func main() {
 
 	// 创建注册器
 	r := nacos.NewNacosRegistry(nacosClient, nacos.WithRegistryGroup(config.Nacos.Group))
-
+	// r, _ := nacos.NewDefaultNacosRegistry()
 	// 创建Nacos解析器
-	resolver := nacosResolver.NewNacosResolver(
-		nacosResolver.WithGroup(config.Nacos.Group),
-		nacosResolver.WithCluster("DEFAULT"),
-	)
-	_ = resolver // 使用resolver避免未使用警告
+	// resolver := nacosResolver.NewNacosResolver(
+	// 	nacosClient,
+	// 	nacosResolver.WithCluster("DEFAULT"),
+	// )
+	// _ = resolver // 使用resolver避免未使用警告
 
 	// 6. 初始化Service
 	// 用户DAO
@@ -117,11 +115,22 @@ func main() {
 			ServiceName: config.Server.Name,
 			Addr:        utils.NewNetAddr("tcp", addr),
 			Weight:      10,
-			Tags: map[string]string{
-				rpcinfo.RPCRole: "api-gateway",
-			},
 		}),
 	)
+
+	// h := server.Default(server.WithHostPorts(addr))
+
+	// h := server.Default(
+	// 	server.WithHostPorts(addr),
+	// 	server.WithRegistry(r, &registry.Info{
+	// 		ServiceName: config.Server.Name,
+	// 		Addr:        utils.NewNetAddr("tcp", addr),
+	// 		Weight:      10,
+	// 		Tags: map[string]string{
+	// 			rpcinfo.RPCRole: "api-gateway",
+	// 		},
+	// 	}),
+	// )
 
 	// 9. 注册路由
 	router.Register(h, userHandler, authHandler, authSvc)

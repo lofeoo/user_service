@@ -7,8 +7,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 
-	"user_service/api/go_gen/api"
-	userApi "user_service/api/go_gen/user"
+	"user_service/api/kitex_gen/api"
+	userApi "user_service/api/kitex_gen/user"
 	"user_service/internal/auth/service"
 	"user_service/internal/pkg/errno"
 	userService "user_service/internal/user/service"
@@ -68,7 +68,7 @@ func (h *AuthHandler) OAuth2Login(ctx context.Context, c *app.RequestContext) {
 	responseSuccess(c, utils.H{
 		"token":         token,
 		"refresh_token": refreshToken,
-		"expires_in":    expiresAt.Unix() - 0,
+		"expires_in":    expiresAt.Unix(), // 移除 - 0
 		"user_info":     userInfo,
 		"is_new_user":   isNewUser,
 	})
@@ -95,6 +95,6 @@ func (h *AuthHandler) RefreshToken(ctx context.Context, c *app.RequestContext) {
 	responseSuccess(c, utils.H{
 		"token":         token,
 		"refresh_token": refreshToken,
-		"expires_in":    expiresAt.Unix() - 0,
+		"expires_in":    expiresAt.Unix(), // 移除 - 0
 	})
 }

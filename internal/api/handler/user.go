@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"strconv"
 
 	"github.com/cloudwego/hertz/pkg/app"
@@ -9,8 +10,8 @@ import (
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 
-	"user_service/api/go_gen/api"
-	userApi "user_service/api/go_gen/user"
+	"user_service/api/kitex_gen/api"
+	userApi "user_service/api/kitex_gen/user"
 	"user_service/internal/pkg/errno"
 	"user_service/internal/user/service"
 )
@@ -260,7 +261,7 @@ func (h *UserHandler) ResetPassword(ctx context.Context, c *app.RequestContext) 
 	}
 
 	// 调用服务重置密码
-	if err := h.userService.ResetPassword(ctx, userID, req.OldPassword, req.NewPassword); err != nil {
+	if err := h.userService.ResetPassword(ctx, userID, req.OldPassword, req.NewPassword_); err != nil {
 		hlog.Errorf("重置密码失败: %v", err)
 		responseError(c, err)
 		return
@@ -297,7 +298,12 @@ func responseSuccess(c *app.RequestContext, data interface{}) {
 	if data != nil {
 		// 将data转换为map
 		if m, ok := data.(utils.H); ok {
-			resp.Data = m
+			// 将 utils.H 类型转换为 map[string]string 类型
+			strMap := make(map[string]string)
+			for k, v := range m {
+				strMap[k] = fmt.Sprint(v)
+			}
+			resp.Data = strMap
 		}
 	}
 
